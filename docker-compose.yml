@@ -1,0 +1,56 @@
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: "mysql://skilllink:skilllink@database:3306/skilllink?serverVersion=8.0&charset=utf8mb4"
+      APP_ENV: dev
+      APP_SECRET: "change_me_in_prod"
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./backend:/var/www/html
+      - vendor:/var/www/html/vendor   # ← vendor isolé du volume host
+    networks:
+      - skilllink-net
+
+  database:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: skilllink
+      MYSQL_USER: skilllink
+      MYSQL_PASSWORD: skilllink
+      MYSQL_ROOT_PASSWORD: rootsecret
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
+      start_period: 30s   # ← laisse MySQL finir son init
+    networks:
+      - skilllink-net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: rootsecret
+    depends_on:
+      - database
+    networks:
+      - skilllink-net
+
+volumes:
+  db-data:
+  vendor:   # ← volume nommé pour vendor
+
+networks:
+  skilllink-net:
+    driver: bridge
