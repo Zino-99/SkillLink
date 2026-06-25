@@ -57,6 +57,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Debug structure
+        run: ls -la
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
