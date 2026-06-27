@@ -103,6 +103,12 @@ jobs:
         run: composer install --no-interaction
         working-directory: backend
 
+
+      - name: Debug vendor
+        run: ls vendor/bin/
+        working-directory: backend
+
+
       - name: Run PHPStan
-        run: ./vendor/bin/phpstan analyse --error-format=github
+        run: vendor/bin/phpstan analyse --error-format=github
         working-directory: backend
