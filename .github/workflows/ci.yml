@@ -80,13 +80,13 @@ jobs:
         run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
         working-directory: backend
         env:
-          DATABASE_URL: 'mysql://skilllink:skilllink@127.0.0.1:3306/skilllink_test'
+          DATABASE_URL: 'mysql://skilllink:skilllink@127.0.0.1:3306/skilllink'
 
       - name: Tests PHPUnit
         run: php bin/phpunit
         working-directory: backend
         env:
-          DATABASE_URL: 'mysql://skilllink:skilllink@127.0.0.1:3306/skilllink_test'
+          DATABASE_URL: 'mysql://skilllink:skilllink@127.0.0.1:3306/skilllink'
 
   backend-quality:
     runs-on: ubuntu-latest
