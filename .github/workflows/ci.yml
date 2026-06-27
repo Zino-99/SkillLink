@@ -110,5 +110,5 @@ jobs:
 
 
       - name: Run PHPStan
-        run: vendor/bin/phpstan analyse --error-format=github
+        run: vendor/bin/phpstan analyse src/ --error-format=github
         working-directory: backend
