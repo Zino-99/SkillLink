@@ -44,7 +44,7 @@ jobs:
       db:
         image: mysql:8.0
         env:
-          MYSQL_DATABASE: skilllink_test
+          MYSQL_DATABASE: skilllink
           MYSQL_USER: skilllink
           MYSQL_PASSWORD: skilllink
           MYSQL_ROOT_PASSWORD: rootsecret
@@ -74,7 +74,7 @@ jobs:
         run: php bin/console doctrine:database:create --env=test --if-not-exists
         working-directory: backend
         env:
-          DATABASE_URL: 'mysql://skilllink:skilllink@127.0.0.1:3306/skilllink_test'
+          DATABASE_URL: 'mysql://skilllink:skilllink@127.0.0.1:3306/skilllink'
 
       - name: Migrations
         run: php bin/console doctrine:migrations:migrate --env=test --no-interaction
