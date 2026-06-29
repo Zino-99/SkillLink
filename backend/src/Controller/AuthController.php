@@ -21,6 +21,15 @@ class AuthController extends AbstractController
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
+        if (empty($data['email']) || empty($data['password']) || empty($data['nom'])) {
+            return $this->json(['message' => 'Email, mot de passe et nom sont obligatoires'], 400);
+        }
+
+        $existing = $em->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+        if ($existing) {
+            return $this->json(['message' => 'Cet email est déjà utilisé'], 409);
+        }
+
         $user = new User();
         $user->setEmail($data['email']);
         $user->setNom($data['nom']);
@@ -30,7 +39,15 @@ class AuthController extends AbstractController
         $em->persist($user);
         $em->flush();
 
-        return $this->json(['message' => 'Compte créé'], 201);
+        return $this->json([
+            'message' => 'Compte créé',
+            'user' => [
+                'id'          => $user->getId(),
+                'email'       => $user->getEmail(),
+                'nom'         => $user->getNom(),
+                'description' => $user->getDescription(),
+            ]
+        ], 201);
     }
 
     #[Route('/login', methods: ['POST'])]
@@ -41,6 +58,10 @@ class AuthController extends AbstractController
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
 
+        if (empty($data['email']) || empty($data['password'])) {
+            return $this->json(['message' => 'Email et mot de passe sont obligatoires'], 400);
+        }
+
         $user = $em->getRepository(User::class)->findOneBy(['email' => $data['email']]);
 
         if (!$user || !$hasher->isPasswordValid($user, $data['password'])) {
@@ -49,7 +70,16 @@ class AuthController extends AbstractController
 
         $request->getSession()->set('user_id', $user->getId());
 
-        return $this->json(['message' => 'Connecté']);
+        return $this->json([
+            'message' => 'Connecté',
+            'user' => [
+                'id'          => $user->getId(),
+                'email'       => $user->getEmail(),
+                'nom'         => $user->getNom(),
+                'description' => $user->getDescription(),
+                'photo'       => $user->getPhoto(),
+            ]
+        ]);
     }
 
     #[Route('/logout', methods: ['POST'])]
