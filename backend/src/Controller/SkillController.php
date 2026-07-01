@@ -23,6 +23,7 @@ final class SkillController extends AbstractController
             'description' => $s->getDescription(),
             'categorie'   => $s->getCategorie(),
             'user_id'     => $s->getUser()->getId(),
+            'user_nom'    => $s->getUser()->getNom(),
         ], $skills);
         return $this->json($data);
     }

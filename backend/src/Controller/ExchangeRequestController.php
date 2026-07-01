@@ -15,22 +15,31 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ExchangeRequestController extends AbstractController
 {
     #[Route('/', name: 'exchanges_list', methods: ['GET'])]
-    public function list(ExchangeRequestRepository $repo): JsonResponse
+    public function list(ExchangeRequestRepository $repo, Request $request): JsonResponse
     {
         $user = $this->getUser();
         if (!$user) return $this->json(['error' => 'Non authentifié'], 401);
         assert($user instanceof User);
 
-        $exchanges = $repo->findBy(['sender' => $user]);
-        $data = array_map(fn(ExchangeRequest $e) => [
+        $sent = $repo->findBy(['sender' => $user]);
+        $received = $repo->findBy(['receiver' => $user]);
+
+        $format = fn(ExchangeRequest $e) => [
             'id'          => $e->getId(),
             'status'      => $e->getStatus(),
             'date'        => $e->getDate()->format('Y-m-d H:i:s'),
             'skill_id'    => $e->getSkill()->getId(),
+            'skill_titre' => $e->getSkill()->getTitre(),
+            'sender_id'   => $e->getSender()->getId(),
+            'sender_nom'  => $e->getSender()->getNom(),
             'receiver_id' => $e->getReceiver()->getId(),
-        ], $exchanges);
+            'receiver_nom'=> $e->getReceiver()->getNom(),
+        ];
 
-        return $this->json($data);
+        return $this->json([
+            'sent'     => array_map($format, $sent),
+            'received' => array_map($format, $received),
+        ]);
     }
 
     #[Route('/', name: 'exchanges_create', methods: ['POST'])]

@@ -16,7 +16,7 @@ const Login = () => {
     try {
       const data = await apiLogin(email, password);
       login(data.user);
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.error || "Erreur de connexion");
     }
