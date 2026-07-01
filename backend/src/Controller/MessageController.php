@@ -14,22 +14,30 @@ use Symfony\Component\Routing\Attribute\Route;
 final class MessageController extends AbstractController
 {
     #[Route('/', name: 'messages_list', methods: ['GET'])]
-    public function list(MessageRepository $repo): JsonResponse
-    {
-        $user = $this->getUser();
-        if (!$user) return $this->json(['error' => 'Non authentifié'], 401);
-        assert($user instanceof User);
+public function list(MessageRepository $repo): JsonResponse
+{
+    $user = $this->getUser();
+    if (!$user) return $this->json(['error' => 'Non authentifié'], 401);
+    assert($user instanceof User);
 
-        $messages = $repo->findBy(['sender' => $user]);
-        $data = array_map(fn(Message $m) => [
-            'id'          => $m->getId(),
-            'contenu'     => $m->getContenu(),
-            'date'        => $m->getDate()->format('Y-m-d H:i:s'),
-            'receiver_id' => $m->getReceiver()->getId(),
-        ], $messages);
+    $sent = $repo->findBy(['sender' => $user]);
+    $received = $repo->findBy(['receiver' => $user]);
 
-        return $this->json($data);
-    }
+    $format = fn(Message $m) => [
+        'id'          => $m->getId(),
+        'contenu'     => $m->getContenu(),
+        'date'        => $m->getDate()->format('Y-m-d H:i:s'),
+        'sender_id'   => $m->getSender()->getId(),
+        'sender_nom'  => $m->getSender()->getNom(),
+        'receiver_id' => $m->getReceiver()->getId(),
+        'receiver_nom'=> $m->getReceiver()->getNom(),
+    ];
+
+    return $this->json([
+        'sent'     => array_map($format, $sent),
+        'received' => array_map($format, $received),
+    ]);
+}
 
     #[Route('/', name: 'messages_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em): JsonResponse
