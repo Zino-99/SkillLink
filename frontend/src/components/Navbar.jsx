@@ -23,11 +23,11 @@ const Navbar = () => {
               <span className="text-lg text-gray-500">
                 Bonjour, {user.nom}
               </span>
-              {isAdmin() && (
-                <Link to="/admin" className="text-lg font-medium text-gray-700 hover:text-gray-900 transition">
-                  Administration
+            {user && isAdmin() && (
+                <Link to="/admin" className="text-base font-medium text-violet-600 hover:text-violet-700 transition">
+                    Administration
                 </Link>
-              )}
+            )}
               <button
                 onClick={handleLogout}
                 className="text-lg font-medium text-red-600 hover:text-red-700 transition"

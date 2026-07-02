@@ -45,6 +45,7 @@ class AuthController extends AbstractController
                 'id'          => $user->getId(),
                 'email'       => $user->getEmail(),
                 'nom'         => $user->getNom(),
+                'roles'       => $user->getRoles(),
                 'description' => $user->getDescription(),
             ]
         ], 201);
@@ -76,6 +77,7 @@ class AuthController extends AbstractController
                 'id'          => $user->getId(),
                 'email'       => $user->getEmail(),
                 'nom'         => $user->getNom(),
+                'roles'       => $user->getRoles(),
                 'description' => $user->getDescription(),
                 'photo'       => $user->getPhoto(),
             ]
@@ -107,44 +109,46 @@ class AuthController extends AbstractController
             'id'          => $user->getId(),
             'email'       => $user->getEmail(),
             'nom'         => $user->getNom(),
+            'roles'       => $user->getRoles(),
             'description' => $user->getDescription(),
             'photo'       => $user->getPhoto(),
         ]);
     }
 
     #[Route('/me', methods: ['PUT'])]
-public function updateMe(
-    Request $request,
-    EntityManagerInterface $em
-): JsonResponse {
-    $userId = $request->getSession()->get('user_id');
+    public function updateMe(
+        Request $request,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $userId = $request->getSession()->get('user_id');
 
-    if (!$userId) {
-        return $this->json(['message' => 'Non authentifié'], 401);
+        if (!$userId) {
+            return $this->json(['message' => 'Non authentifié'], 401);
+        }
+
+        $user = $em->getRepository(User::class)->find($userId);
+        $data = json_decode($request->getContent(), true);
+
+        if (isset($data['nom']))         $user->setNom($data['nom']);
+        if (isset($data['description'])) $user->setDescription($data['description']);
+
+        $em->flush();
+
+        return $this->json([
+            'message' => 'Profil mis à jour',
+            'user' => [
+                'id'          => $user->getId(),
+                'email'       => $user->getEmail(),
+                'nom'         => $user->getNom(),
+                'roles'       => $user->getRoles(),
+                'description' => $user->getDescription(),
+                'photo'       => $user->getPhoto(),
+            ]
+        ]);
     }
 
-    $user = $em->getRepository(User::class)->find($userId);
-    $data = json_decode($request->getContent(), true);
-
-    if (isset($data['nom']))         $user->setNom($data['nom']);
-    if (isset($data['description'])) $user->setDescription($data['description']);
-
-    $em->flush();
-
-    return $this->json([
-        'message' => 'Profil mis à jour',
-        'user' => [
-            'id'          => $user->getId(),
-            'email'       => $user->getEmail(),
-            'nom'         => $user->getNom(),
-            'description' => $user->getDescription(),
-            'photo'       => $user->getPhoto(),
-        ]
-    ]);
-    }
-
-        #[Route('/users', methods: ['GET'])]
-        public function users(EntityManagerInterface $em): JsonResponse
+    #[Route('/users', methods: ['GET'])]
+    public function users(EntityManagerInterface $em): JsonResponse
     {
         $users = $em->getRepository(User::class)->findAll();
         $data = array_map(fn(User $u) => [
@@ -153,5 +157,4 @@ public function updateMe(
         ], $users);
         return $this->json($data);
     }
-
 }

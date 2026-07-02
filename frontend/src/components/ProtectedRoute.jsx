@@ -5,7 +5,8 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
   const { user, isAdmin } = useAuth();
 
   if (!user) return <Navigate to="/login" />;
-  if (adminOnly && !isAdmin()) return <Navigate to="/" />;
+  if (adminOnly && !isAdmin()) return <Navigate to="/dashboard" />;
+  if (!adminOnly && isAdmin()) return <Navigate to="/admin" />;
 
   return children;
 };

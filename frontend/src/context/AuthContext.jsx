@@ -21,8 +21,8 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const isAdmin = () => user?.roles?.includes("ROLE_ADMIN");
-  const isUser = () => user?.roles?.includes("ROLE_USER");
+const isAdmin = () => user?.roles?.includes("ROLE_ADMIN");
+const isUser = () => !user?.roles?.includes("ROLE_ADMIN");
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading, isAdmin, isUser }}>

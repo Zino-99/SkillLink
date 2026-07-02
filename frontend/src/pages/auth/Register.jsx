@@ -20,7 +20,7 @@ const Register = () => {
       const data = await apiLogin(email, password);
       login(data.user);
       setSuccess(true);
-      setTimeout(() => navigate("/onboarding"), 2000);
+      setTimeout(() => navigate("/onboarding"), 1500);
     } catch (err) {
       setError(err.error || "Erreur lors de l'inscription");
     }
@@ -34,14 +34,14 @@ const Register = () => {
         </h1>
 
         {success && (
-          <div className="bg-green-50 text-green-700 text-base p-4 rounded-xl mb-6 text-center font-medium">
-            ✅ Compte créé avec succès ! Redirection en cours...
+          <div className="border-l-4 border-gray-900 bg-gray-50 px-4 py-3 rounded-r-xl mb-6">
+            <p className="text-base font-medium text-gray-900">Compte créé. Redirection en cours...</p>
           </div>
         )}
 
         {error && (
-          <div className="bg-red-50 text-red-700 text-base p-4 rounded-xl mb-6">
-            {error}
+          <div className="border-l-4 border-red-600 bg-red-50 px-4 py-3 rounded-r-xl mb-6">
+            <p className="text-base font-medium text-red-700">{error}</p>
           </div>
         )}
 
@@ -88,7 +88,7 @@ const Register = () => {
           <button
             type="submit"
             disabled={success}
-            className="w-full bg-gray-900 text-white py-4 rounded-xl text-lg font-semibold hover:bg-gray-800 transition disabled:opacity-40"
+            className="w-full bg-gray-900 text-white py-4 rounded-xl text-lg font-semibold hover:bg-gray-800 transition cursor-pointer disabled:opacity-40"
           >
             S'inscrire
           </button>
