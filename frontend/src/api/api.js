@@ -16,7 +16,7 @@ const request = async (method, endpoint, body = null) => {
 // Auth
 export const register = (nom, email, password) => request('POST', '/register', { nom, email, password });
 export const login = (email, password) => request('POST', '/login', { email, password });
-export const logout = () => request('POST', '/logout');
+export const logout = () => fetch(`${BASE_URL}/logout`, { method: 'POST', credentials: 'include' });
 export const me = () => request('GET', '/me');
 
 // Skills
