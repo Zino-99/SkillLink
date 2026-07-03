@@ -20,7 +20,6 @@ const ExploreSkills = () => {
 
   const categories = [...new Set(skills.map((s) => s.categorie))];
 
-  // Grouper les skills par utilisateur
   const userMap = {};
   skills.forEach((s) => {
     if (s.user_id === user?.id) return;
@@ -63,10 +62,10 @@ const ExploreSkills = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
         Explorer
       </h1>
-      <p className="text-lg text-gray-500 mb-8">
+      <p className="text-base md:text-lg text-gray-500 mb-8">
         Découvrez des profils et proposez un échange de compétences
       </p>
 
@@ -77,7 +76,7 @@ const ExploreSkills = () => {
       )}
 
       {/* Filtres */}
-      <div className="flex gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row gap-4 mb-8">
         <input
           type="text"
           placeholder="Rechercher une compétence..."
@@ -88,7 +87,7 @@ const ExploreSkills = () => {
         <select
           value={categorie}
           onChange={(e) => setCategorie(e.target.value)}
-          className="border-2 border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-gray-900 transition"
+          className="w-full sm:w-auto border-2 border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-gray-900 transition"
         >
           <option value="">Toutes les catégories</option>
           {categories.map((cat) => (
@@ -109,7 +108,6 @@ const ExploreSkills = () => {
             key={u.user_id}
             className="bg-white border-2 border-gray-100 rounded-2xl p-6 hover:border-gray-300 transition"
           >
-            {/* Avatar + Nom */}
             <div className="flex items-center gap-4 mb-5">
               <div className={`w-14 h-14 rounded-2xl ${getColor(u.user_nom)} flex items-center justify-center text-white text-xl font-bold flex-shrink-0`}>
                 {u.user_nom?.charAt(0).toUpperCase()}
@@ -120,7 +118,6 @@ const ExploreSkills = () => {
               </div>
             </div>
 
-            {/* Skills */}
             <div className="space-y-2 mb-6">
               {u.skills.map((skill) => (
                 <div key={skill.id} className="flex items-center gap-2">
@@ -132,17 +129,16 @@ const ExploreSkills = () => {
               ))}
             </div>
 
-            {/* Bouton */}
             <button
               onClick={() => handleExchange(u.skills[0])}
               disabled={sent[u.user_id]}
-              className={`w-full py-3 rounded-xl text-sm font-semibold transition ${
+              className={`w-full py-3 rounded-xl text-sm font-semibold transition cursor-pointer ${
                 sent[u.user_id]
                   ? "bg-green-50 text-green-700 cursor-default"
                   : "bg-gray-900 text-white hover:bg-gray-800"
               }`}
             >
-              {sent[u.user_id] ? "✅ Demande envoyée" : "Proposer un échange"}
+              {sent[u.user_id] ? "Demande envoyée" : "Proposer un échange"}
             </button>
           </div>
         ))}

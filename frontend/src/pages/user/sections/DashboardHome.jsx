@@ -54,15 +54,15 @@ const DashboardHome = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
         Bonjour, {user?.nom} 👋
       </h1>
-      <p className="text-lg text-gray-500 mb-10">
+      <p className="text-base md:text-lg text-gray-500 mb-8">
         Bienvenue sur votre tableau de bord SkillLink
       </p>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
         <div className="bg-white border-2 border-gray-100 rounded-2xl p-6">
           <p className="text-4xl font-bold text-gray-900 mb-1">{mySkills.length}</p>
           <p className="text-base text-gray-500">Compétences publiées</p>
@@ -112,7 +112,7 @@ const DashboardHome = () => {
           )}
 
           <form onSubmit={handleAdd} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Titre</label>
                 <input

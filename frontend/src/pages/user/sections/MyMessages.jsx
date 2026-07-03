@@ -55,6 +55,7 @@ const MyMessages = () => {
         receiver_id: parseInt(receiverId),
         receiver_nom: users.find(u => u.id === parseInt(receiverId))?.nom,
       }]);
+      setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       setError(err.error || "Erreur lors de l'envoi");
     }
@@ -70,17 +71,17 @@ const MyMessages = () => {
     const name = type === "sent" ? message.receiver_nom : message.sender_nom;
     const label = type === "sent" ? `À : ${name}` : `De : ${name}`;
     return (
-      <div className="bg-white border-2 border-gray-100 rounded-2xl p-6">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl ${getColor(name)} flex items-center justify-center text-white text-sm font-bold`}>
-              {name?.charAt(0).toUpperCase() || "?"}
-            </div>
-            <p className="text-sm font-semibold text-gray-900">{label}</p>
+      <div className="bg-white border-2 border-gray-100 rounded-2xl p-5">
+        <div className="flex items-start gap-3 mb-3">
+          <div className={`w-10 h-10 rounded-xl ${getColor(name)} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
+            {name?.charAt(0).toUpperCase() || "?"}
           </div>
-          <p className="text-sm text-gray-400">
-            {new Date(message.date).toLocaleDateString("fr-FR")}
-          </p>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-gray-900">{label}</p>
+            <p className="text-xs text-gray-400">
+              {new Date(message.date).toLocaleDateString("fr-FR")}
+            </p>
+          </div>
         </div>
         <p className="text-base text-gray-700">{message.contenu}</p>
       </div>
@@ -90,30 +91,32 @@ const MyMessages = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <h1 className="text-3xl font-bold text-gray-900">Mes messages</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Mes messages</h1>
         <button
           onClick={() => { setShowForm(!showForm); setSuccess(false); }}
-          className="px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition"
+          className="px-4 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition cursor-pointer"
         >
-          + Nouveau message
+          + Nouveau
         </button>
       </div>
-      <p className="text-lg text-gray-500 mb-8">
+      <p className="text-base md:text-lg text-gray-500 mb-8">
         Consultez et envoyez des messages aux autres utilisateurs
       </p>
 
       {success && (
-        <div className="bg-green-50 text-green-700 text-base p-4 rounded-xl mb-6">
-          ✅ Message envoyé avec succès
+        <div className="border-l-4 border-gray-900 bg-gray-50 px-4 py-3 rounded-r-xl mb-6">
+          <p className="text-base font-medium text-gray-900">Message envoyé.</p>
         </div>
       )}
 
       {/* Formulaire */}
       {showForm && (
-        <div className="bg-white border-2 border-gray-100 rounded-2xl p-6 mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Nouveau message</h2>
+        <div className="bg-white border-2 border-gray-100 rounded-2xl p-5 mb-8">
+          <h2 className="text-base font-bold text-gray-900 mb-4">Nouveau message</h2>
           {error && (
-            <div className="bg-red-50 text-red-700 text-base p-4 rounded-xl mb-4">{error}</div>
+            <div className="border-l-4 border-red-600 bg-red-50 px-4 py-3 rounded-r-xl mb-4">
+              <p className="text-base font-medium text-red-700">{error}</p>
+            </div>
           )}
           <form onSubmit={handleSend} className="space-y-4">
             <div>
@@ -142,10 +145,17 @@ const MyMessages = () => {
               />
             </div>
             <div className="flex gap-3">
-              <button type="submit" className="flex-1 py-3 rounded-xl bg-gray-900 text-white text-base font-semibold hover:bg-gray-800 transition">
+              <button
+                type="submit"
+                className="flex-1 py-3 rounded-xl bg-gray-900 text-white text-base font-semibold hover:bg-gray-800 transition cursor-pointer"
+              >
                 Envoyer
               </button>
-              <button type="button" onClick={() => setShowForm(false)} className="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 text-base font-semibold hover:bg-gray-50 transition">
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="flex-1 py-3 rounded-xl border-2 border-gray-200 text-gray-700 text-base font-semibold hover:bg-gray-50 transition cursor-pointer"
+              >
                 Annuler
               </button>
             </div>
@@ -157,13 +167,13 @@ const MyMessages = () => {
       <div className="flex gap-2 mb-8">
         <button
           onClick={() => setTab("received")}
-          className={`px-5 py-2.5 rounded-xl text-base font-semibold transition ${tab === "received" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+          className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-base font-semibold transition ${tab === "received" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
         >
           Reçus {received.length > 0 && `(${received.length})`}
         </button>
         <button
           onClick={() => setTab("sent")}
-          className={`px-5 py-2.5 rounded-xl text-base font-semibold transition ${tab === "sent" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+          className={`flex-1 sm:flex-none px-5 py-2.5 rounded-xl text-base font-semibold transition ${tab === "sent" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
         >
           Envoyés {sent.length > 0 && `(${sent.length})`}
         </button>
@@ -173,9 +183,8 @@ const MyMessages = () => {
 
       {!loading && tab === "received" && (
         received.length === 0 ? (
-          <div className="bg-white border-2 border-gray-100 rounded-2xl p-12 text-center">
-            <p className="text-2xl mb-3">✉️</p>
-            <p className="text-lg font-semibold text-gray-900 mb-2">Aucun message reçu</p>
+          <div className="bg-white border-2 border-gray-100 rounded-2xl p-8 text-center">
+            <p className="text-lg font-semibold text-gray-900">Aucun message reçu</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -186,9 +195,8 @@ const MyMessages = () => {
 
       {!loading && tab === "sent" && (
         sent.length === 0 ? (
-          <div className="bg-white border-2 border-gray-100 rounded-2xl p-12 text-center">
-            <p className="text-2xl mb-3">✉️</p>
-            <p className="text-lg font-semibold text-gray-900 mb-2">Aucun message envoyé</p>
+          <div className="bg-white border-2 border-gray-100 rounded-2xl p-8 text-center">
+            <p className="text-lg font-semibold text-gray-900">Aucun message envoyé</p>
           </div>
         ) : (
           <div className="space-y-4">

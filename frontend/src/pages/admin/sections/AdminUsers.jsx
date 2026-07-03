@@ -99,16 +99,17 @@ const AdminUsers = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <h1 className="text-3xl font-bold text-gray-900">Utilisateurs</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Utilisateurs</h1>
         <button
           onClick={() => { resetForm(); setShowForm(true); }}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition cursor-pointer"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition cursor-pointer"
         >
           <Plus size={16} />
-          Ajouter un utilisateur
+          <span className="hidden sm:inline">Ajouter un utilisateur</span>
+          <span className="sm:hidden">Ajouter</span>
         </button>
       </div>
-      <p className="text-lg text-gray-500 mb-8">
+      <p className="text-base md:text-lg text-gray-500 mb-8">
         Gérez les utilisateurs de la plateforme
       </p>
 
@@ -119,9 +120,9 @@ const AdminUsers = () => {
       )}
 
       {showForm && (
-        <div className="bg-white border-2 border-gray-100 rounded-2xl p-6 mb-8">
+        <div className="bg-white border-2 border-gray-100 rounded-2xl p-5 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-gray-900">
+            <h2 className="text-base font-bold text-gray-900">
               {editUser ? "Modifier l'utilisateur" : "Nouvel utilisateur"}
             </h2>
             <button onClick={resetForm} className="text-gray-400 hover:text-gray-700 cursor-pointer">
@@ -136,7 +137,7 @@ const AdminUsers = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-base font-medium text-gray-700 mb-2">Nom</label>
                 <input
@@ -176,7 +177,7 @@ const AdminUsers = () => {
                 type="submit"
                 className="flex-1 py-3 rounded-xl bg-gray-900 text-white text-base font-semibold hover:bg-gray-800 transition cursor-pointer"
               >
-                {editUser ? "Enregistrer les modifications" : "Créer l'utilisateur"}
+                {editUser ? "Enregistrer" : "Créer"}
               </button>
               <button
                 type="button"
@@ -193,7 +194,7 @@ const AdminUsers = () => {
       {loading && <p className="text-gray-400">Chargement...</p>}
 
       {!loading && users.length === 0 && (
-        <div className="bg-white border-2 border-gray-100 rounded-2xl p-12 text-center">
+        <div className="bg-white border-2 border-gray-100 rounded-2xl p-8 text-center">
           <p className="text-lg font-semibold text-gray-900">Aucun utilisateur trouvé</p>
         </div>
       )}
@@ -202,20 +203,20 @@ const AdminUsers = () => {
         {users.map((u) => (
           <div
             key={u.id}
-            className="bg-white border-2 border-gray-100 rounded-2xl p-6 flex items-center justify-between"
+            className="bg-white border-2 border-gray-100 rounded-2xl p-5 flex items-center justify-between gap-4"
           >
-            <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-xl ${getColor(u.nom)} flex items-center justify-center text-white text-lg font-bold`}>
+            <div className="flex items-center gap-3 min-w-0">
+              <div className={`w-11 h-11 rounded-xl ${getColor(u.nom)} flex items-center justify-center text-white text-base font-bold flex-shrink-0`}>
                 {u.nom?.charAt(0).toUpperCase()}
               </div>
-              <div>
-                <p className="font-bold text-gray-900 text-base">{u.nom}</p>
-                <p className="text-sm text-gray-400">{u.email}</p>
+              <div className="min-w-0">
+                <p className="font-bold text-gray-900 text-base truncate">{u.nom}</p>
+                <p className="text-sm text-gray-400 truncate">{u.email}</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <span className="bg-gray-50 text-gray-600 text-xs font-semibold px-3 py-1 rounded-lg">
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <span className="hidden sm:block bg-gray-50 text-gray-600 text-xs font-semibold px-3 py-1 rounded-lg">
                 {u.skills_count} compétence{u.skills_count > 1 ? "s" : ""}
               </span>
               <button

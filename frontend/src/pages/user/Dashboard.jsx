@@ -21,9 +21,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh-72px)]">
+    <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
       <Sidebar active={active} setActive={setActive} />
-      <main className="flex-1 overflow-y-auto bg-gray-50 p-8">
+      <main className="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-8">
         {renderContent()}
       </main>
     </div>

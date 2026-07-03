@@ -39,32 +39,32 @@ const MyProfile = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">Mon profil</h1>
-      <p className="text-lg text-gray-500 mb-8">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Mon profil</h1>
+      <p className="text-base md:text-lg text-gray-500 mb-8">
         Modifiez vos informations personnelles
       </p>
 
-      <div className="max-w-xl">
+      <div className="w-full max-w-xl">
         {/* Avatar */}
-        <div className="flex items-center gap-5 mb-10">
-          <div className={`w-20 h-20 rounded-2xl ${getColor(user?.nom)} flex items-center justify-center text-white text-3xl font-bold`}>
+        <div className="flex items-center gap-4 mb-8">
+          <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl ${getColor(user?.nom)} flex items-center justify-center text-white text-2xl md:text-3xl font-bold flex-shrink-0`}>
             {user?.nom?.charAt(0).toUpperCase()}
           </div>
-          <div>
-            <p className="text-xl font-bold text-gray-900">{user?.nom}</p>
-            <p className="text-gray-400">{user?.email}</p>
+          <div className="min-w-0">
+            <p className="text-lg md:text-xl font-bold text-gray-900 truncate">{user?.nom}</p>
+            <p className="text-gray-400 text-sm truncate">{user?.email}</p>
           </div>
         </div>
 
         {success && (
-          <div className="bg-green-50 text-green-700 text-base p-4 rounded-xl mb-6">
-            ✅ Profil mis à jour avec succès
+          <div className="border-l-4 border-gray-900 bg-gray-50 px-4 py-3 rounded-r-xl mb-6">
+            <p className="text-base font-medium text-gray-900">Profil mis à jour.</p>
           </div>
         )}
 
         {error && (
-          <div className="bg-red-50 text-red-700 text-base p-4 rounded-xl mb-6">
-            {error}
+          <div className="border-l-4 border-red-600 bg-red-50 px-4 py-3 rounded-r-xl mb-6">
+            <p className="text-base font-medium text-red-700">{error}</p>
           </div>
         )}
 
@@ -96,7 +96,7 @@ const MyProfile = () => {
 
           <button
             type="submit"
-            className="w-full py-4 rounded-xl bg-gray-900 text-white text-base font-semibold hover:bg-gray-800 transition"
+            className="w-full py-4 rounded-xl bg-gray-900 text-white text-base font-semibold hover:bg-gray-800 transition cursor-pointer"
           >
             Sauvegarder les modifications
           </button>
