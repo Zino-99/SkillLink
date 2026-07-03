@@ -12,16 +12,18 @@ const DashboardHome = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  useEffect(() => {
-    fetchSkills();
-  }, []);
-
   const fetchSkills = () => {
     getSkills()
       .then(setSkills)
       .catch(() => {})
       .finally(() => setLoading(false));
   };
+
+
+  useEffect(() => {
+    fetchSkills();
+  }, []);
+
 
   const mySkills = skills.filter((s) => s.user_id === user?.id);
 

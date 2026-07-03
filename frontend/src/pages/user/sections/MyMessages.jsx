@@ -28,7 +28,7 @@ const MyMessages = () => {
       .then((res) => res.json())
       .then((data) => setUsers(data.filter((u) => u.id !== user?.id)))
       .catch(() => {});
-  }, []);
+  }, [user?.id]);
 
   const handleSend = async (e) => {
     e.preventDefault();

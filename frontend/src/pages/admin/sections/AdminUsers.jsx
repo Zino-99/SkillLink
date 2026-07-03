@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Pencil, Trash2, Plus, X } from "lucide-react";
 
 const AdminUsers = () => {
@@ -10,18 +10,21 @@ const AdminUsers = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = () => {
+  const fetchUsers = useCallback(() => {
     setLoading(true);
     fetch("http://localhost:8000/api/admin/users", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setUsers(data.filter((u) => !u.roles?.includes("ROLE_ADMIN"))))
       .catch(() => {})
       .finally(() => setLoading(false));
-  };
+  }, []);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchUsers();
+  }, [fetchUsers]);
+
+
 
   const getColor = (name) => {
     const colors = ["bg-violet-600", "bg-blue-600", "bg-green-600", "bg-orange-500", "bg-pink-600", "bg-teal-600"];

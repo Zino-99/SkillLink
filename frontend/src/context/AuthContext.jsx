@@ -1,5 +1,8 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import { createContext, useContext, useState, useEffect } from "react";
 import { me, logout as apiLogout } from "../api/api";
+
 
 const AuthContext = createContext(null);
 

@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
 
+const EmptyState = ({ text }) => (
+    <div className="bg-white border-2 border-gray-100 rounded-2xl p-8 text-center">
+      <p className="text-lg font-semibold text-gray-900">{text}</p>
+    </div>
+);
+
+
 const MyExchanges = () => {
   const [sent, setSent] = useState([]);
   const [received, setReceived] = useState([]);
@@ -56,11 +63,7 @@ const MyExchanges = () => {
     return colors[index] || "bg-gray-600";
   };
 
-  const EmptyState = ({ text }) => (
-    <div className="bg-white border-2 border-gray-100 rounded-2xl p-8 text-center">
-      <p className="text-lg font-semibold text-gray-900">{text}</p>
-    </div>
-  );
+
 
   return (
     <div>
