@@ -104,7 +104,12 @@ const ExploreSkills = () => {
           value={categorie}
           onChange={(e) => setCategorie(e.target.value)}
           className="w-full sm:w-auto border-2 border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-gray-900 transition"
-        />
+        >
+          <option value="">Toutes les catégories</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
       </div>
 
       {loading && <p className="text-gray-400">Chargement...</p>}
