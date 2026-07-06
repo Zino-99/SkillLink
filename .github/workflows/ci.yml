@@ -65,6 +65,12 @@ jobs:
         with:
           php-version: '8.4'
           extensions: pdo, pdo_mysql
+      
+      - name: Créer le fichier .env
+        run: |
+          echo "APP_ENV=test" > backend/.env
+          echo "APP_SECRET=testsecret" >> backend/.env
+          echo "DATABASE_URL=mysql://skilllink:skilllink@127.0.0.1:3306/skilllink_test" >> backend/.env
 
       - name: Installation dependances Composer
         run: composer install --no-interaction
