@@ -13,8 +13,9 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/api/skills')]
 final class SkillController extends AbstractController
 {
+
     #[Route('/', name: 'skills_list', methods: ['GET'])]
-    public function list(SkillRepository $repo): JsonResponse
+    public function list(SkillRepository $repo): JsonResponse   
     {
         $skills = $repo->findAll();
         $data = array_map(fn(Skill $s) => [
@@ -24,8 +25,9 @@ final class SkillController extends AbstractController
             'categorie'   => $s->getCategorie(),
             'user_id'     => $s->getUser()->getId(),
             'user_nom'    => $s->getUser()->getNom(),
-        ], $skills);
-        return $this->json($data);
+        ], array_filter($skills, fn(Skill $s) => !in_array('ROLE_ADMIN', $s->getUser()->getRoles())));
+
+        return $this->json(array_values($data));
     }
 
     #[Route('/', name: 'skills_create', methods: ['POST'])]

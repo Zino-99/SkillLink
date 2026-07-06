@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { getSkills, createExchange } from "../../../api/api";
+import { getSkills, createExchange, createReport } from "../../../api/api";
 import { useAuth } from "../../../context/AuthContext";
+import { Flag, X } from "lucide-react";
 
 const ExploreSkills = () => {
   const { user } = useAuth();
@@ -10,6 +11,9 @@ const ExploreSkills = () => {
   const [categorie, setCategorie] = useState("");
   const [sent, setSent] = useState({});
   const [error, setError] = useState("");
+  const [reportForm, setReportForm] = useState(null);
+  const [reportDesc, setReportDesc] = useState("");
+  const [reported, setReported] = useState({});
 
   useEffect(() => {
     getSkills()
@@ -51,6 +55,18 @@ const ExploreSkills = () => {
     }
   };
 
+  const handleReport = async (userId) => {
+    if (!reportDesc.trim()) return;
+    try {
+      await createReport(userId, reportDesc);
+      setReported((prev) => ({ ...prev, [userId]: true }));
+      setReportForm(null);
+      setReportDesc("");
+    } catch (err) {
+      setError(err.error || "Erreur lors du signalement");
+    }
+  };
+
   const getColor = (name) => {
     const colors = [
       "bg-violet-600", "bg-blue-600", "bg-green-600",
@@ -70,8 +86,8 @@ const ExploreSkills = () => {
       </p>
 
       {error && (
-        <div className="bg-red-50 text-red-700 text-base p-4 rounded-xl mb-6">
-          {error}
+        <div className="border-l-4 border-red-600 bg-red-50 px-4 py-3 rounded-r-xl mb-6">
+          <p className="text-base font-medium text-red-700">{error}</p>
         </div>
       )}
 
@@ -88,12 +104,7 @@ const ExploreSkills = () => {
           value={categorie}
           onChange={(e) => setCategorie(e.target.value)}
           className="w-full sm:w-auto border-2 border-gray-200 rounded-xl px-4 py-3 text-base focus:outline-none focus:border-gray-900 transition"
-        >
-          <option value="">Toutes les catégories</option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
+        />
       </div>
 
       {loading && <p className="text-gray-400">Chargement...</p>}
@@ -108,16 +119,62 @@ const ExploreSkills = () => {
             key={u.user_id}
             className="bg-white border-2 border-gray-100 rounded-2xl p-6 hover:border-gray-300 transition"
           >
-            <div className="flex items-center gap-4 mb-5">
-              <div className={`w-14 h-14 rounded-2xl ${getColor(u.user_nom)} flex items-center justify-center text-white text-xl font-bold flex-shrink-0`}>
-                {u.user_nom?.charAt(0).toUpperCase()}
+            {/* Avatar + Nom + Drapeau */}
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-4">
+                <div className={`w-14 h-14 rounded-2xl ${getColor(u.user_nom)} flex items-center justify-center text-white text-xl font-bold flex-shrink-0`}>
+                  {u.user_nom?.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-lg font-bold text-gray-900">{u.user_nom}</p>
+                  <p className="text-sm text-gray-400">{u.skills.length} compétence{u.skills.length > 1 ? "s" : ""}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-lg font-bold text-gray-900">{u.user_nom}</p>
-                <p className="text-sm text-gray-400">{u.skills.length} compétence{u.skills.length > 1 ? "s" : ""}</p>
-              </div>
+              <button
+                onClick={() => {
+                  if (!reported[u.user_id]) {
+                    setReportForm(reportForm === u.user_id ? null : u.user_id);
+                    setReportDesc("");
+                  }
+                }}
+                className={`p-2 rounded-xl transition cursor-pointer ${
+                  reported[u.user_id]
+                    ? "text-red-600 bg-red-50 cursor-default"
+                    : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+                }`}
+                title={reported[u.user_id] ? "Utilisateur signalé" : "Signaler cet utilisateur"}
+              >
+                <Flag size={16} />
+              </button>
             </div>
 
+            {/* Formulaire signalement */}
+            {reportForm === u.user_id && !reported[u.user_id] && (
+              <div className="mb-4 bg-gray-50 rounded-xl p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm font-semibold text-gray-900">Signaler cet utilisateur</p>
+                  <button onClick={() => setReportForm(null)} className="text-gray-400 cursor-pointer">
+                    <X size={16} />
+                  </button>
+                </div>
+                <textarea
+                  value={reportDesc}
+                  onChange={(e) => setReportDesc(e.target.value)}
+                  placeholder="Décrivez le motif du signalement..."
+                  rows={3}
+                  className="w-full border-2 border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-gray-900 transition resize-none mb-2"
+                />
+                <button
+                  onClick={() => handleReport(u.user_id)}
+                  disabled={!reportDesc.trim()}
+                  className="w-full py-2 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition disabled:opacity-40 cursor-pointer"
+                >
+                  Envoyer le signalement
+                </button>
+              </div>
+            )}
+
+            {/* Skills */}
             <div className="space-y-2 mb-6">
               {u.skills.map((skill) => (
                 <div key={skill.id} className="flex items-center gap-2">
@@ -129,6 +186,7 @@ const ExploreSkills = () => {
               ))}
             </div>
 
+            {/* Bouton échange */}
             <button
               onClick={() => handleExchange(u.skills[0])}
               disabled={sent[u.user_id]}

@@ -25,3 +25,8 @@ export const createSkill = (data) => request('POST', '/skills/', data);
 export const deleteSkill = (id) => request('DELETE', `/skills/${id}`);
 // Exchanges
 export const createExchange = (skill_id, receiver_id) => request('POST', '/exchanges/', { skill_id, receiver_id });
+
+export const createReport = (reported_id, description) => request('POST', '/reports/', { reported_id, description });
+
+
+export const createRating = (rated_id, note, commentaire) => request('POST', '/ratings/', { rated_id, note, commentaire });
