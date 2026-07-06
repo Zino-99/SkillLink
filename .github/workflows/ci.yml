@@ -3,14 +3,12 @@ name: CI SkillLink
 on:
   push:
     branches: [main, develop]
-
   pull_request:
     branches: [main, develop]
 
 jobs:
   frontend:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
@@ -57,15 +55,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Debug structure
-        run: ls -la
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
           extensions: pdo, pdo_mysql
-      
+
       - name: Créer le fichier .env
         run: |
           echo "APP_ENV=test" > backend/.env
@@ -94,7 +89,6 @@ jobs:
         env:
           DATABASE_URL: 'mysql://skilllink:skilllink@127.0.0.1:3306/skilllink_test'
 
-
   backend-quality:
     runs-on: ubuntu-latest
     steps:
@@ -106,15 +100,19 @@ jobs:
           php-version: '8.4'
           extensions: pdo, pdo_mysql
 
+      - name: Créer le fichier .env
+        run: |
+          echo "APP_ENV=dev" > backend/.env
+          echo "APP_SECRET=testsecret" >> backend/.env
+          echo "DATABASE_URL=mysql://skilllink:skilllink@127.0.0.1:3306/skilllink" >> backend/.env
+
       - name: Installation dépendances Composer
         run: composer install --no-interaction
         working-directory: backend
 
-
       - name: Debug vendor
         run: ls vendor/bin/
         working-directory: backend
-
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse src/ --error-format=github
