@@ -30,3 +30,5 @@ export const createReport = (reported_id, description) => request('POST', '/repo
 
 
 export const createRating = (rated_id, note, commentaire) => request('POST', '/ratings/', { rated_id, note, commentaire });
+
+export const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';

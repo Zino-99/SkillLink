@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../context/AuthContext";
+import { API_BASE } from "../../../api/api";
 
 const MyMessages = () => {
   const { user } = useAuth();
@@ -15,7 +16,7 @@ const MyMessages = () => {
   const [tab, setTab] = useState("received");
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/messages/", { credentials: "include" })
+    fetch(`${API_BASE}/messages/`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         setSent(data.sent || []);
@@ -24,7 +25,7 @@ const MyMessages = () => {
       .catch(() => {})
       .finally(() => setLoading(false));
 
-    fetch("http://localhost:8000/api/users/", { credentials: "include" })
+    fetch(`${API_BASE}/users/`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setUsers(data.filter((u) => u.id !== user?.id)))
       .catch(() => {});
@@ -34,7 +35,7 @@ const MyMessages = () => {
     e.preventDefault();
     setError("");
     try {
-      const res = await fetch("http://localhost:8000/api/messages/", {
+      const res = await fetch(`${API_BASE}/messages/`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -109,7 +110,6 @@ const MyMessages = () => {
         </div>
       )}
 
-      {/* Formulaire */}
       {showForm && (
         <div className="bg-white border-2 border-gray-100 rounded-2xl p-5 mb-8">
           <h2 className="text-base font-bold text-gray-900 mb-4">Nouveau message</h2>
@@ -163,7 +163,6 @@ const MyMessages = () => {
         </div>
       )}
 
-      {/* Tabs */}
       <div className="flex gap-2 mb-8">
         <button
           onClick={() => setTab("received")}

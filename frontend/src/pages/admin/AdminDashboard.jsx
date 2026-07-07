@@ -3,10 +3,11 @@ import { Menu, X } from "lucide-react";
 import AdminSidebar from "../../components/AdminSidebar";
 import AdminUsers from "./sections/AdminUsers";
 import AdminReports from "./sections/AdminReports";
+import { API_BASE } from "../../api/api";
 
 const AdminDashboard = () => {
-    const [active, setActive] = useState("stats");
-    const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState("stats");
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleNav = (id) => {
     setActive(id);
@@ -70,7 +71,7 @@ const AdminStats = () => {
   const [stats, setStats] = useState({ users: 0, skills: 0, exchanges: 0, reports: 0 });
 
   useState(() => {
-    fetch("http://localhost:8000/api/admin/stats", { credentials: "include" })
+    fetch(`${API_BASE}/admin/stats`, { credentials: "include" })
       .then((res) => res.json())
       .then(setStats)
       .catch(() => {});

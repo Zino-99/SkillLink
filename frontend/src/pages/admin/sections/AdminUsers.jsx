@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Pencil, Trash2, Plus, X } from "lucide-react";
+import { API_BASE } from "../../../api/api";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -12,7 +13,7 @@ const AdminUsers = () => {
 
   const fetchUsers = useCallback(() => {
     setLoading(true);
-    fetch("http://localhost:8000/api/admin/users", { credentials: "include" })
+    fetch(`${API_BASE}/admin/users`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => setUsers(data.filter((u) => !u.roles?.includes("ROLE_ADMIN"))))
       .catch(() => {})
@@ -23,8 +24,6 @@ const AdminUsers = () => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchUsers();
   }, [fetchUsers]);
-
-
 
   const getColor = (name) => {
     const colors = ["bg-violet-600", "bg-blue-600", "bg-green-600", "bg-orange-500", "bg-pink-600", "bg-teal-600"];
@@ -47,7 +46,7 @@ const AdminUsers = () => {
   const handleDelete = async (id) => {
     if (!confirm("Supprimer cet utilisateur ?")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/admin/users/${id}`, {
+      const res = await fetch(`${API_BASE}/admin/users/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -72,7 +71,7 @@ const AdminUsers = () => {
 
     try {
       if (editUser) {
-        const res = await fetch(`http://localhost:8000/api/admin/users/${editUser.id}`, {
+        const res = await fetch(`${API_BASE}/admin/users/${editUser.id}`, {
           method: "PUT",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -82,7 +81,7 @@ const AdminUsers = () => {
         setSuccess("Utilisateur mis à jour.");
       } else {
         if (!form.password) return setError("Le mot de passe est obligatoire.");
-        const res = await fetch("http://localhost:8000/api/admin/users", {
+        const res = await fetch(`${API_BASE}/admin/users`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },

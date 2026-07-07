@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
+import { API_BASE } from "../../../api/api";
 
 const AdminReports = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/admin/reports", { credentials: "include" })
+    fetch(`${API_BASE}/admin/reports`, { credentials: "include" })
       .then((res) => res.json())
       .then(setReports)
       .catch(() => {})
@@ -13,7 +14,7 @@ const AdminReports = () => {
   }, []);
 
   const handleStatus = async (id, status) => {
-    await fetch(`http://localhost:8000/api/admin/reports/${id}`, {
+    await fetch(`${API_BASE}/admin/reports/${id}`, {
       method: "PUT",
       credentials: "include",
       headers: { "Content-Type": "application/json" },

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ExchangeCard from "../../../components/ExchangeCard";
+import { API_BASE } from "../../../api/api";
 
 const EmptyState = ({ text }) => (
   <div className="bg-white border-2 border-gray-100 rounded-2xl p-8 text-center">
@@ -14,7 +15,7 @@ const MyExchanges = () => {
   const [tab, setTab] = useState("received");
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/exchanges/", {
+    fetch(`${API_BASE}/exchanges/`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -27,7 +28,7 @@ const MyExchanges = () => {
   }, []);
 
   const handleStatusChange = async (id, status) => {
-    await fetch(`http://localhost:8000/api/exchanges/${id}`, {
+    await fetch(`${API_BASE}/exchanges/${id}`, {
       method: "PUT",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
