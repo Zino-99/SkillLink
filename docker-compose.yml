@@ -6,9 +6,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: "mysql://skilllink:skilllink@database:3306/skilllink?serverVersion=8.0&charset=utf8mb4"
       APP_ENV: dev
-      APP_SECRET: "change_me_in_prod"
     depends_on:
       database:
         condition: service_healthy
