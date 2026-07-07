@@ -95,6 +95,7 @@ jobs:
         working-directory: backend
         env:
           DATABASE_URL: 'mysql://skilllink:skilllink@127.0.0.1:3306/skilllink_test'
+          APP_ENV: test
 
   backend-quality:
     runs-on: ubuntu-latest
