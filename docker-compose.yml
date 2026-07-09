@@ -1,5 +1,6 @@
 
 services:
+
   backend:
     build:
       context: ./backend
@@ -15,6 +16,24 @@ services:
       - vendor:/var/www/html/vendor   # ← vendor isolé du volume host
     networks:
       - skilllink-net
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+    # Force Vite a scruter les fichiers (hot-reload fiable sous Windows/Docker)
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./frontend:/app          # code source monte pour le hot-reload
+      - /app/node_modules        # node_modules isole du host (evite les conflits Windows)
+    depends_on:
+      - backend
+    networks:
+      - skilllink-net
+
+
 
   database:
     image: mysql:8.0

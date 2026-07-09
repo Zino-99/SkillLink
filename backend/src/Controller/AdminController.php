@@ -75,46 +75,46 @@ final class AdminController extends AbstractController
         return $this->json(['message' => 'Utilisateur mis à jour']);
     }
 
-        #[Route('/users/{id}', methods: ['DELETE'])]
-public function deleteUser(User $user, EntityManagerInterface $em): JsonResponse
-{
-    // Supprimer les skills
-    foreach ($em->getRepository(\App\Entity\Skill::class)->findBy(['user' => $user]) as $skill) {
-        $em->remove($skill);
+    #[Route('/users/{id}', methods: ['DELETE'])]
+    public function deleteUser(User $user, EntityManagerInterface $em): JsonResponse
+    {
+        // Supprimer les skills
+        foreach ($em->getRepository(\App\Entity\Skill::class)->findBy(['user' => $user]) as $skill) {
+            $em->remove($skill);
     }
-    // Supprimer les exchanges
-    foreach ($em->getRepository(\App\Entity\ExchangeRequest::class)->findBy(['sender' => $user]) as $e) {
-        $em->remove($e);
-    }
-    foreach ($em->getRepository(\App\Entity\ExchangeRequest::class)->findBy(['receiver' => $user]) as $e) {
-        $em->remove($e);
-    }
-    // Supprimer les messages
-    foreach ($em->getRepository(\App\Entity\Message::class)->findBy(['sender' => $user]) as $m) {
-        $em->remove($m);
-    }
-    foreach ($em->getRepository(\App\Entity\Message::class)->findBy(['receiver' => $user]) as $m) {
-        $em->remove($m);
-    }
-    // Supprimer les ratings
-    foreach ($em->getRepository(\App\Entity\Rating::class)->findBy(['rater' => $user]) as $r) {
-        $em->remove($r);
-    }
-    foreach ($em->getRepository(\App\Entity\Rating::class)->findBy(['rated' => $user]) as $r) {
-        $em->remove($r);
-    }
-    // Supprimer les reports
-    foreach ($em->getRepository(\App\Entity\Report::class)->findBy(['reporter' => $user]) as $r) {
-        $em->remove($r);
-    }
-    foreach ($em->getRepository(\App\Entity\Report::class)->findBy(['reported' => $user]) as $r) {
-        $em->remove($r);
-    }
+        // Supprimer les exchanges
+        foreach ($em->getRepository(\App\Entity\ExchangeRequest::class)->findBy(['sender' => $user]) as $e) {
+            $em->remove($e);
+        }
+        foreach ($em->getRepository(\App\Entity\ExchangeRequest::class)->findBy(['receiver' => $user]) as $e) {
+            $em->remove($e);
+        }
+        // Supprimer les messages
+        foreach ($em->getRepository(\App\Entity\Message::class)->findBy(['sender' => $user]) as $m) {
+            $em->remove($m);
+        }
+        foreach ($em->getRepository(\App\Entity\Message::class)->findBy(['receiver' => $user]) as $m) {
+            $em->remove($m);
+        }
+        // Supprimer les ratings
+        foreach ($em->getRepository(\App\Entity\Rating::class)->findBy(['rater' => $user]) as $r) {
+            $em->remove($r);
+        }
+        foreach ($em->getRepository(\App\Entity\Rating::class)->findBy(['rated' => $user]) as $r) {
+            $em->remove($r);
+        }
+        // Supprimer les reports
+        foreach ($em->getRepository(\App\Entity\Report::class)->findBy(['reporter' => $user]) as $r) {
+            $em->remove($r);
+        }
+        foreach ($em->getRepository(\App\Entity\Report::class)->findBy(['reported' => $user]) as $r) {
+            $em->remove($r);
+        }
 
-    $em->remove($user);
-    $em->flush();
+        $em->remove($user);
+        $em->flush();
 
-    return $this->json(['message' => 'Utilisateur supprimé']);
+        return $this->json(['message' => 'Utilisateur supprimé']);
 }
 
     #[Route('/reports', methods: ['GET'])]
