@@ -19,7 +19,7 @@ jobs:
           script: |
             cd ~/SkillLink
             git pull origin main
-            echo "VITE_API_URL=http://72.62.191.73/api" > frontend/.env.production
+            echo "VITE_API_URL=https://skilllink.nettya.fr/api" > frontend/.env.production
             cd frontend
             rm -rf node_modules
             npm install
