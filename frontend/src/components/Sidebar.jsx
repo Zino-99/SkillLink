@@ -101,10 +101,12 @@ const Sidebar = ({ active, setActive }) => {
       )}
 
       {/* Desktop sidebar */}
+
       <aside className="hidden md:flex w-64 border-r-2 border-gray-100 flex-col">
         <div className="px-6 py-6 border-b-2 border-gray-100">
           <p className="text-2xl font-bold text-gray-900 tracking-tight">SkillLink</p>
         </div>
+
 
         <div className="px-6 py-6 border-b-2 border-gray-100">
           <div className={`w-12 h-12 rounded-xl ${getColor(user?.nom)} flex items-center justify-center text-white text-lg font-bold mb-3`}>
